@@ -6,27 +6,19 @@ fi
 
 # Manually configured section
 # Aliases
-alias vim="nvim"
 {{ if eq .chezmoi.os "linux" }}
 # Aliases to run some conda packages w/o activating environment
 if [[ -f "$HOME/.conda_aliases" ]]; then
     source $HOME/.conda_aliases
 fi
-
 {{ end }}
+
 {{ if eq .chezmoi.os "darwin" }}
-# Make aliases for SSH hosts when logging in from macOS
-alias scg1='ssh -Y dnachun@login01.scg.stanford.edu -t zsh'
-alias scg2='ssh -Y dnachun@login02.scg.stanford.edu -t zsh'
-alias scg3='ssh -Y dnachun@login03.scg.stanford.edu -t zsh'
-alias scg4='ssh -Y dnachun@login04.scg.stanford.edu -t zsh'
-
-alias sherlock='ssh -Y dnachun@sherlock.stanford.edu -t zsh'
-
 ulimit -n 10240
 {{ end }}
+
 # Environment variables
-export EDITOR="nvim"
+#export EDITOR="nvim"
 export SPROMPT='zsh: correct %F{1}%R%f to %F{2}%r%f [nyae]? '
 export ENHANCD_COMMAND=ecd
 export R_MAX_NUM_DLLS=500
@@ -34,10 +26,6 @@ export R_MAX_NUM_DLLS=500
 export XDG_CACHE_HOME="$HOME/.cache"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-{{ if eq .chezmoi.os "darwin" }}
-export HOMEBREW_GITHUB_API_TOKEN="$(chezmoi secret keyring get --service=github --user=danielnachun)"
-
-{{ end }}
 {{ if eq .chezmoi.os "darwin" }}
 # Use GNU utilities in macOS instead of BSD ones
 export PATH="$(brew --prefix)/sbin:$PATH"
@@ -276,44 +264,6 @@ autoload -Uz promptinit && promptinit
 
 # Zoxide
 eval "$(zoxide init zsh)"
-
-{{ if eq .chezmoi.os "linux" }}
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba init' !!
-export MAMBA_EXE="/home/dnachun/.local/bin/micromamba";
-export MAMBA_ROOT_PREFIX="/home/dnachun/micromamba";
-__mamba_setup="$('/home/dnachun/.local/bin/micromamba' shell hook --shell zsh --prefix '/home/dnachun/micromamba' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__mamba_setup"
-else
-    if [ -f "/home/dnachun/micromamba/etc/profile.d/micromamba.sh" ]; then
-        . "/home/dnachun/micromamba/etc/profile.d/micromamba.sh"
-    else
-        export  PATH="/home/dnachun/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
-    fi
-fi
-unset __mamba_setup
-# <<< mamba initialize <<<
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/dnachun/micromamba/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/dnachun/micromamba/etc/profile.d/conda.sh" ]; then
-        . "/home/dnachun/micromamba/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/dnachun/micromamba/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
-if [ -f "/home/dnachun/micromamba/etc/profile.d/mamba.sh" ]; then
-    . "/home/dnachun/micromamba/etc/profile.d/mamba.sh"
-fi
-# <<< conda initialize <<<
-{{ end }}
 
 if [[ -f $HOME/.activate_cope.sh ]]; then
     source $HOME/.activate_cope.sh
